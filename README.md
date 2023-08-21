@@ -15,6 +15,7 @@ Run these commands:
 
 or Run by docker compose
 
-
 or Run by docker compose down
+
+'sudo build . -t "node-todo-app"'
 
