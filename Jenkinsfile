@@ -1,28 +1,28 @@
 pipeline {
-    agent { label "dev-server" }
+    agent { label 'dev-agent' }
     stages{
-        stage("Clone Code"){
-            steps{
-                git url: "https://github.com/LondheShubham153/node-todo-cicd.git", branch: "master"
+        stage('Code'){
+            steps {
+                git url: 'https://github.com/surapkp/node-todo-cicd.git', branch: 'master'
             }
         }
-        stage("Build and Test"){
-            steps{
-                sh "docker build . -t node-app-test-new"
+        stage('Buid and Test'){
+            steps {
+                sh 'docker build . -t surapkp/node-todo-app-cicd:latest'
             }
         }
-        stage("Push to Docker Hub"){
-            steps{
-                withCredentials([usernamePassword(credentialsId:"dockerHub",passwordVariable:"dockerHubPass",usernameVariable:"dockerHubUser")]){
-                sh "docker tag node-app-test-new ${env.dockerHubUser}/node-app-test-new:latest"
+        stage('Docker Logging and Push image'){
+            steps {
+                echo "Login into Docker Hub and saved image"
+                withCredentials([usernamePassword(credentialsId:"dockerhub", passwordVariable:"dockerHubPass", usernameVariable:"dockerHubUser")]){
                 sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPass}"
-                sh "docker push ${env.dockerHubUser}/node-app-test-new:latest"
+                sh "docker push surapkp/node-todo-app-cicd:latest"
                 }
             }
         }
-        stage("Deploy"){
-            steps{
-                sh "docker-compose down && docker-compose up -d"
+        stage('Deploy'){
+            steps {
+                sh 'docker-compose down  && docker-compose up -d'
             }
         }
     }
