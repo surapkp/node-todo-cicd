@@ -2,6 +2,6 @@ version: '3.9'
 
 services:
   web:
-    image:surapkp/node-todo-app-cicd:latest
+    image: surapkp/node-todo-app-cicd:latest
     ports:
       - "8000:8000"
